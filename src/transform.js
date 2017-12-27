@@ -1,20 +1,18 @@
-function node_to_string(node) {
-  let string = "";
+function node_to_json(node) {
+  let json = {};
   if (node.nodes) {
-    node.nodes.each(function (node) {
-      if (node.type === 'decl') {
-        string += node.prop + ":" + node.value + ";";
-      }
+    node.each(function (node) {
+      json[node.prop] = node.value;
     });
   }
-  return string;
+  return json;
 }
 
 export default function transformCssToJSON(root) {
   let cssMap = {};
   root.each(function (node) {
     if (node.type == "rule" && node.selectors) {
-      cssMap[node.selectors.join(" ")] = node_to_string(node);
+      cssMap[node.selectors.join(" ")] = node_to_json(node);
     }
   });
   return cssMap;
